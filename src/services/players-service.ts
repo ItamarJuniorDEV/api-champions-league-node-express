@@ -1,9 +1,9 @@
 import { PlayerModel } from "../models/player-model";
-import * as PlayerRespository from "../repositories/players-repository";
+import * as PlayerRepository from "../repositories/players-repository";
 import * as HttpResponse from "../utils/http-helper";
 
 export const getPlayerService = async () => {
-  const data = await PlayerRespository.findAllPlayers();
+  const data = await PlayerRepository.findAllPlayers();
   let response = null;
 
   if (data) {
@@ -16,7 +16,7 @@ export const getPlayerService = async () => {
 };
 
 export const getPlayerByIdService = async (id: number) => {
-  const data = await PlayerRespository.findPlayerById(id);
+  const data = await PlayerRepository.findPlayerById(id);
   let response = null;
 
   if(data) {
@@ -32,7 +32,7 @@ export const createPlayerService =  async (player: PlayerModel) => {
   let response = null;
 
   if (Object.keys(player).length !== 0) {
-    await PlayerRespository.insertPlayer(player);
+    await PlayerRepository.insertPlayer(player);
     response = HttpResponse.created();
   } else {
     response = HttpResponse.badRequest();
@@ -41,3 +41,13 @@ export const createPlayerService =  async (player: PlayerModel) => {
   return response;
 };
 
+export const deletePlayerService = async (id: number) => {
+  let response = null;
+  await PlayerRepository.deleteOnePlayer(id);
+
+  response = HttpResponse.ok({
+    message: "deleted"
+  });
+
+  return response;
+};
